@@ -1,5 +1,15 @@
 import { useEffect, useMemo } from 'react';
-import { RepeatWrapping, Texture } from 'three';
+import { RepeatWrapping, Texture, Vector3 } from 'three';
+
+function vectorToRGBNormal(vector: Vector3): string {
+  const convert = (component: number) => (component + 1) * 0.5 * 255;
+
+  const r = Math.round(convert(vector.x));
+  const g = Math.round(convert(vector.y));
+  const b = Math.round(convert(vector.z));
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
 
 export function useTileNormalTexture() {
   const texture = useMemo(() => new Texture(), []);
@@ -30,28 +40,30 @@ export function useTileNormalTexture() {
       gradient.addColorStop(1, c2);
     };
 
+    const smothness = 2;
+
     addGradientColorStops(
       gradients.top,
-      'rgb(128, 255, 128)',
-      'rgb(128, 128, 255)'
+      vectorToRGBNormal(new Vector3(0, 1, smothness).normalize()),
+      vectorToRGBNormal(new Vector3(0, 0, 1))
     );
 
     addGradientColorStops(
       gradients.bottom,
-      'rgb(128, 128, 255)',
-      'rgb(128, 0, 128)'
+      vectorToRGBNormal(new Vector3(0, 0, 1)),
+      vectorToRGBNormal(new Vector3(0, -1, smothness).normalize())
     );
 
     addGradientColorStops(
       gradients.left,
-      'rgb(0, 128, 128)',
-      'rgb(128, 128, 255)'
+      vectorToRGBNormal(new Vector3(-1, 0, smothness).normalize()),
+      vectorToRGBNormal(new Vector3(0, 0, 1))
     );
 
     addGradientColorStops(
       gradients.right,
-      'rgb(128, 128, 255)',
-      'rgb(255, 128, 128)'
+      vectorToRGBNormal(new Vector3(0, 0, 1)),
+      vectorToRGBNormal(new Vector3(1, 0, smothness).normalize())
     );
 
     // Добавляем градиенты к сторонам, исключая углы
@@ -110,7 +122,7 @@ export function useTileNormalTexture() {
 
     texture.wrapS = RepeatWrapping;
     texture.wrapT = RepeatWrapping;
-    texture.flipY = false;
+    texture.flipY = true;
 
     texture.repeat.set(4, 4);
 

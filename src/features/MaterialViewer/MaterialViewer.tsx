@@ -1,4 +1,4 @@
-import { DoubleSide, Texture } from 'three';
+import { DoubleSide, Texture, Vector2 } from 'three';
 
 export interface MaterialViewerProps {
   map?: Texture;
@@ -10,12 +10,13 @@ export function MaterialViewer({ map, normalMap }: MaterialViewerProps = {}) {
     <mesh>
       <planeGeometry args={[4, 4]} />
       <meshPhysicalMaterial
-        color="hotpink"
+        color="lightseagreen"
         side={DoubleSide}
         roughness={0.1}
-        metalness={0.3}
+        metalness={0.1}
         map={map}
-        bumpMap={normalMap}
+        normalMap={normalMap}
+        normalScale={new Vector2(1.0, -1.0)}
       />
     </mesh>
   );
