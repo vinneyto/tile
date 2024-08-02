@@ -1,12 +1,27 @@
-import { Layout, Slider, Row, Col, ColorPicker, Select } from 'antd';
-import { Vector2 } from 'three';
+import { Layout, Slider, Row, Col, ColorPicker, Select, Divider } from 'antd';
 import { Scene } from './features/Scene';
-import { useState } from 'react';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
+import { Surface } from './features/Surface';
+import { Euler, Vector3 } from 'three';
+import { useAppSelector } from './store';
+import { useDispatch } from 'react-redux';
+import {
+  AppMaterialId,
+  setEnvironment,
+  setMaterialId,
+} from './store/applicationSlice';
+import {
+  updateMaterialColor,
+  updateMaterialEdgeRatio,
+  updateMaterialEdgeSmoothness,
+  updateMaterialTileMetalness,
+  updateMaterialTileRepeat,
+  updateMaterialTileRoughness,
+} from './store/materialsSlice';
 
 const { Sider, Content } = Layout;
 
-const environments = [
+const ENVIRONMENTS_LIST = [
   'sunset',
   'dawn',
   'night',
@@ -19,14 +34,20 @@ const environments = [
   'lobby',
 ];
 
+const MATERIALS_LIST = ['floor', 'walls'];
+
 export const App = () => {
-  const [environment, setEnvironment] = useState<PresetsType>('forest');
-  const [color, setColor] = useState('#5F5F89');
-  const [edgeRatio, setEdgeRatio] = useState(0.02);
-  const [edgeSmoothness, setEdgeSmoothness] = useState(2);
-  const [tileRepeat, setTileRepeat] = useState(10);
-  const [tileRoughness, setTileRoughness] = useState(0.1);
-  const [tileMetalness, setTileMetalness] = useState(0.1);
+  const { environment, materialId } = useAppSelector(
+    (state) => state.application
+  );
+
+  const materials = useAppSelector((state) => state.materials);
+
+  const material = materials[materialId];
+  const floorMaterial = materials['floor'];
+  const wallsMaterial = materials['walls'];
+
+  const dispatch = useDispatch();
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -37,15 +58,37 @@ export const App = () => {
           alignItems: 'center',
         }}
       >
-        <Scene
-          env={environment}
-          tileEdgeRatio={edgeRatio}
-          tileEdgeSmoothness={edgeSmoothness}
-          tileRepeat={new Vector2(tileRepeat, tileRepeat)}
-          tileColor={color}
-          tileRoughness={tileRoughness}
-          tileMetalness={tileMetalness}
-        />
+        <Scene env={environment}>
+          <Surface
+            position={new Vector3(0, -2, 0)}
+            rotation={new Euler(-Math.PI / 2, 0, 0)}
+            tile={floorMaterial}
+          />
+
+          <Surface
+            position={new Vector3(0, 0, -2)}
+            rotation={new Euler(0, 0, 0)}
+            tile={wallsMaterial}
+          />
+
+          <Surface
+            position={new Vector3(0, 0, 2)}
+            rotation={new Euler(0, Math.PI, 0)}
+            tile={wallsMaterial}
+          />
+
+          <Surface
+            position={new Vector3(-2, 0, 0)}
+            rotation={new Euler(0, Math.PI / 2, 0)}
+            tile={wallsMaterial}
+          />
+
+          <Surface
+            position={new Vector3(2, 0, 0)}
+            rotation={new Euler(0, -Math.PI / 2, 0)}
+            tile={wallsMaterial}
+          />
+        </Scene>
       </Content>
       <Sider width={300} theme="light">
         <div style={{ padding: '24px' }}>
@@ -57,9 +100,11 @@ export const App = () => {
               <Select
                 defaultValue={environment}
                 style={{ width: '100%' }}
-                onChange={(value: PresetsType) => setEnvironment(value)}
+                onChange={(value: PresetsType) =>
+                  dispatch(setEnvironment(value))
+                }
               >
-                {environments.map((env) => (
+                {ENVIRONMENTS_LIST.map((env) => (
                   <Select.Option key={env} value={env}>
                     {env.charAt(0).toUpperCase() + env.slice(1)}
                   </Select.Option>
@@ -67,14 +112,45 @@ export const App = () => {
               </Select>
             </Col>
           </Row>
+
+          <Row align="middle" style={{ marginBottom: 16 }}>
+            <Col span={8}>
+              <label>Material:</label>
+            </Col>
+            <Col span={16}>
+              <Select
+                defaultValue={materialId}
+                style={{ width: '100%' }}
+                onChange={(value: AppMaterialId) =>
+                  dispatch(setMaterialId(value))
+                }
+              >
+                {MATERIALS_LIST.map((env) => (
+                  <Select.Option key={env} value={env}>
+                    {env.charAt(0).toUpperCase() + env.slice(1)}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+          </Row>
+
+          <Divider />
+
           <Row align="middle" style={{ marginBottom: 16 }}>
             <Col span={8}>
               <label>Color:</label>
             </Col>
             <Col span={16}>
               <ColorPicker
-                value={color}
-                onChange={(c) => setColor(c.toHexString())}
+                value={material.color}
+                onChange={(c) =>
+                  dispatch(
+                    updateMaterialColor({
+                      id: materialId,
+                      color: c.toHexString(),
+                    })
+                  )
+                }
               />
             </Col>
           </Row>
@@ -87,8 +163,12 @@ export const App = () => {
                 min={0.001}
                 max={0.1}
                 step={0.001}
-                value={edgeRatio}
-                onChange={setEdgeRatio}
+                value={material.edgeRatio}
+                onChange={(edgeRatio) =>
+                  dispatch(
+                    updateMaterialEdgeRatio({ id: materialId, edgeRatio })
+                  )
+                }
               />
             </Col>
           </Row>
@@ -101,8 +181,15 @@ export const App = () => {
                 min={0}
                 max={20}
                 step={1}
-                value={edgeSmoothness}
-                onChange={setEdgeSmoothness}
+                value={material.edgeSmoothness}
+                onChange={(edgeSmoothness) =>
+                  dispatch(
+                    updateMaterialEdgeSmoothness({
+                      id: materialId,
+                      edgeSmoothness,
+                    })
+                  )
+                }
               />
             </Col>
           </Row>
@@ -115,8 +202,12 @@ export const App = () => {
                 min={2}
                 max={20}
                 step={1}
-                value={tileRepeat}
-                onChange={setTileRepeat}
+                value={material.repeat}
+                onChange={(tileRepeat) =>
+                  dispatch(
+                    updateMaterialTileRepeat({ id: materialId, tileRepeat })
+                  )
+                }
               />
             </Col>
           </Row>
@@ -130,8 +221,15 @@ export const App = () => {
                 min={0}
                 max={1}
                 step={0.01}
-                value={tileRoughness}
-                onChange={setTileRoughness}
+                value={material.roughness}
+                onChange={(tileRoughness) =>
+                  dispatch(
+                    updateMaterialTileRoughness({
+                      id: materialId,
+                      tileRoughness,
+                    })
+                  )
+                }
               />
             </Col>
           </Row>
@@ -145,8 +243,15 @@ export const App = () => {
                 min={0}
                 max={1}
                 step={0.01}
-                value={tileMetalness}
-                onChange={setTileMetalness}
+                value={material.metalness}
+                onChange={(tileMetalness) =>
+                  dispatch(
+                    updateMaterialTileMetalness({
+                      id: materialId,
+                      tileMetalness,
+                    })
+                  )
+                }
               />
             </Col>
           </Row>
