@@ -1,4 +1,4 @@
-import { Layout, Slider, Row, Col, ColorPicker, Select, Divider } from 'antd';
+import { Layout, Slider, ColorPicker, Select, Divider } from 'antd';
 import { Scene } from './features/Scene';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { Surface } from './features/Surface';
@@ -18,6 +18,8 @@ import {
   updateMaterialTileRepeat,
   updateMaterialTileRoughness,
 } from './store/materialsSlice';
+import cl from './App.module.css';
+import { SidebarItem } from './UI/SidebarItem/SidebarItem';
 
 const { Sider, Content } = Layout;
 
@@ -90,172 +92,125 @@ export const App = () => {
           />
         </Scene>
       </Content>
-      <Sider width={300} theme="light">
-        <div style={{ padding: '24px' }}>
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Env:</label>
-            </Col>
-            <Col span={16}>
-              <Select
-                defaultValue={environment}
-                style={{ width: '100%' }}
-                onChange={(value: PresetsType) =>
-                  dispatch(setEnvironment(value))
-                }
-              >
-                {ENVIRONMENTS_LIST.map((env) => (
-                  <Select.Option key={env} value={env}>
-                    {env.charAt(0).toUpperCase() + env.slice(1)}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
+      <Sider width={300} theme="light" className={cl.sidebar}>
+        <SidebarItem name="Env">
+          <Select
+            defaultValue={environment}
+            style={{ width: '100%' }}
+            onChange={(value: PresetsType) => dispatch(setEnvironment(value))}
+          >
+            {ENVIRONMENTS_LIST.map((env) => (
+              <Select.Option key={env} value={env}>
+                {env.charAt(0).toUpperCase() + env.slice(1)}
+              </Select.Option>
+            ))}
+          </Select>
+        </SidebarItem>
 
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Material:</label>
-            </Col>
-            <Col span={16}>
-              <Select
-                defaultValue={materialId}
-                style={{ width: '100%' }}
-                onChange={(value: AppMaterialId) =>
-                  dispatch(setMaterialId(value))
-                }
-              >
-                {MATERIALS_LIST.map((env) => (
-                  <Select.Option key={env} value={env}>
-                    {env.charAt(0).toUpperCase() + env.slice(1)}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Col>
-          </Row>
+        <SidebarItem name="Material">
+          <Select
+            defaultValue={materialId}
+            style={{ width: '100%' }}
+            onChange={(value: AppMaterialId) => dispatch(setMaterialId(value))}
+          >
+            {MATERIALS_LIST.map((env) => (
+              <Select.Option key={env} value={env}>
+                {env.charAt(0).toUpperCase() + env.slice(1)}
+              </Select.Option>
+            ))}
+          </Select>
+        </SidebarItem>
 
-          <Divider />
+        <Divider />
 
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Color:</label>
-            </Col>
-            <Col span={16}>
-              <ColorPicker
-                value={material.color}
-                onChange={(c) =>
-                  dispatch(
-                    updateMaterialColor({
-                      id: materialId,
-                      color: c.toHexString(),
-                    })
-                  )
-                }
-              />
-            </Col>
-          </Row>
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Edge:</label>
-            </Col>
-            <Col span={16}>
-              <Slider
-                min={0.001}
-                max={0.1}
-                step={0.001}
-                value={material.edgeRatio}
-                onChange={(edgeRatio) =>
-                  dispatch(
-                    updateMaterialEdgeRatio({ id: materialId, edgeRatio })
-                  )
-                }
-              />
-            </Col>
-          </Row>
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Smooth:</label>
-            </Col>
-            <Col span={16}>
-              <Slider
-                min={0}
-                max={20}
-                step={1}
-                value={material.edgeSmoothness}
-                onChange={(edgeSmoothness) =>
-                  dispatch(
-                    updateMaterialEdgeSmoothness({
-                      id: materialId,
-                      edgeSmoothness,
-                    })
-                  )
-                }
-              />
-            </Col>
-          </Row>
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Repeat:</label>
-            </Col>
-            <Col span={16}>
-              <Slider
-                min={2}
-                max={20}
-                step={1}
-                value={material.repeat}
-                onChange={(tileRepeat) =>
-                  dispatch(
-                    updateMaterialTileRepeat({ id: materialId, tileRepeat })
-                  )
-                }
-              />
-            </Col>
-          </Row>
+        <SidebarItem name="Color">
+          <ColorPicker
+            value={material.color}
+            onChange={(c) =>
+              dispatch(
+                updateMaterialColor({
+                  id: materialId,
+                  color: c.toHexString(),
+                })
+              )
+            }
+          />
+        </SidebarItem>
 
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Roughness:</label>
-            </Col>
-            <Col span={16}>
-              <Slider
-                min={0}
-                max={1}
-                step={0.01}
-                value={material.roughness}
-                onChange={(tileRoughness) =>
-                  dispatch(
-                    updateMaterialTileRoughness({
-                      id: materialId,
-                      tileRoughness,
-                    })
-                  )
-                }
-              />
-            </Col>
-          </Row>
+        <SidebarItem name="Edge">
+          <Slider
+            min={0.001}
+            max={0.1}
+            step={0.001}
+            value={material.edgeRatio}
+            onChange={(edgeRatio) =>
+              dispatch(updateMaterialEdgeRatio({ id: materialId, edgeRatio }))
+            }
+          />
+        </SidebarItem>
 
-          <Row align="middle" style={{ marginBottom: 16 }}>
-            <Col span={8}>
-              <label>Metalness:</label>
-            </Col>
-            <Col span={16}>
-              <Slider
-                min={0}
-                max={1}
-                step={0.01}
-                value={material.metalness}
-                onChange={(tileMetalness) =>
-                  dispatch(
-                    updateMaterialTileMetalness({
-                      id: materialId,
-                      tileMetalness,
-                    })
-                  )
-                }
-              />
-            </Col>
-          </Row>
-        </div>
+        <SidebarItem name="Smooth">
+          <Slider
+            min={0}
+            max={20}
+            step={1}
+            value={material.edgeSmoothness}
+            onChange={(edgeSmoothness) =>
+              dispatch(
+                updateMaterialEdgeSmoothness({
+                  id: materialId,
+                  edgeSmoothness,
+                })
+              )
+            }
+          />
+        </SidebarItem>
+
+        <SidebarItem name="Repeat">
+          <Slider
+            min={2}
+            max={20}
+            step={1}
+            value={material.repeat}
+            onChange={(tileRepeat) =>
+              dispatch(updateMaterialTileRepeat({ id: materialId, tileRepeat }))
+            }
+          />
+        </SidebarItem>
+
+        <SidebarItem name="Roughness">
+          <Slider
+            min={0}
+            max={1}
+            step={0.01}
+            value={material.roughness}
+            onChange={(tileRoughness) =>
+              dispatch(
+                updateMaterialTileRoughness({
+                  id: materialId,
+                  tileRoughness,
+                })
+              )
+            }
+          />
+        </SidebarItem>
+
+        <SidebarItem name="Metalness">
+          <Slider
+            min={0}
+            max={1}
+            step={0.01}
+            value={material.metalness}
+            onChange={(tileMetalness) =>
+              dispatch(
+                updateMaterialTileMetalness({
+                  id: materialId,
+                  tileMetalness,
+                })
+              )
+            }
+          />
+        </SidebarItem>
       </Sider>
     </Layout>
   );
