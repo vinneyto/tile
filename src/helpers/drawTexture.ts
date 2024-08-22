@@ -94,3 +94,23 @@ export function drawTileNormalMap(
   ctx.closePath();
   ctx.fill();
 }
+
+export function drawTileColorMap(
+  ctx: CanvasRenderingContext2D,
+  colors: string[],
+  dimension: number
+) {
+  const tileSize = ctx.canvas.width / dimension;
+
+  let colorIndex = 0;
+
+  for (let row = 0; row < dimension; row++) {
+    for (let col = 0; col < dimension; col++) {
+      const color = colors[colorIndex] || colors[colors.length - 1];
+      ctx.fillStyle = color;
+      ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+
+      colorIndex++;
+    }
+  }
+}

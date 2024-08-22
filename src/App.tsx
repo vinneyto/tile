@@ -1,8 +1,5 @@
 import { Layout, Slider, ColorPicker, Select, Divider } from 'antd';
-import { Scene } from './features/Scene';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
-import { Surface } from './features/Surface';
-import { Euler, Vector3 } from 'three';
 import { useAppSelector } from './store';
 import { useDispatch } from 'react-redux';
 import {
@@ -19,7 +16,8 @@ import {
   updateMaterialTileRoughness,
 } from './store/materialsSlice';
 import cl from './App.module.css';
-import { SidebarItem } from './UI/SidebarItem/SidebarItem';
+import { SidebarItem } from './components/UI/SidebarItem/SidebarItem';
+import { Scene } from './containers/Scene';
 
 const { Sider, Content } = Layout;
 
@@ -46,8 +44,6 @@ export const App = () => {
   const materials = useAppSelector((state) => state.materials);
 
   const material = materials[materialId];
-  const floorMaterial = materials['floor'];
-  const wallsMaterial = materials['walls'];
 
   const dispatch = useDispatch();
 
@@ -60,37 +56,7 @@ export const App = () => {
           alignItems: 'center',
         }}
       >
-        <Scene env={environment}>
-          <Surface
-            position={new Vector3(0, -2, 0)}
-            rotation={new Euler(-Math.PI / 2, 0, 0)}
-            tile={floorMaterial}
-          />
-
-          <Surface
-            position={new Vector3(0, 0, -2)}
-            rotation={new Euler(0, 0, 0)}
-            tile={wallsMaterial}
-          />
-
-          <Surface
-            position={new Vector3(0, 0, 2)}
-            rotation={new Euler(0, Math.PI, 0)}
-            tile={wallsMaterial}
-          />
-
-          <Surface
-            position={new Vector3(-2, 0, 0)}
-            rotation={new Euler(0, Math.PI / 2, 0)}
-            tile={wallsMaterial}
-          />
-
-          <Surface
-            position={new Vector3(2, 0, 0)}
-            rotation={new Euler(0, -Math.PI / 2, 0)}
-            tile={wallsMaterial}
-          />
-        </Scene>
+        <Scene />
       </Content>
       <Sider width={300} theme="light" className={cl.sidebar}>
         <SidebarItem name="Env">
