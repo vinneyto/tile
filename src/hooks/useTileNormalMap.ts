@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { RepeatWrapping, Texture, Vector2 } from 'three';
-import { drawTileNormalMap } from '../helpers/drawTexture';
+import { drawTileNormalPatternMap } from '../helpers/drawTexture';
 
 export const TILE_SIZE = 512;
 
@@ -31,17 +31,24 @@ export function useCanvasTexture(size: number) {
   return [texture, ctx] as const;
 }
 
-export function useTileNormalTexture(
+export function useTileNormalMap(
   edgeRatio: number,
   edgeSmoothness: number,
-  repeat: Vector2
+  repeat: Vector2,
+  dimension: number,
 ) {
   const [texture, ctx] = useCanvasTexture(TILE_SIZE);
 
   useEffect(() => {
     const edgeWidth = TILE_SIZE * edgeRatio;
 
-    drawTileNormalMap(ctx, TILE_SIZE, edgeWidth, edgeSmoothness);
+    drawTileNormalPatternMap(
+      ctx,
+      TILE_SIZE,
+      edgeWidth,
+      edgeSmoothness,
+      dimension,
+    );
 
     texture.needsUpdate = true;
   }, [texture, ctx, edgeSmoothness, edgeRatio]);

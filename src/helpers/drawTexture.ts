@@ -10,11 +10,11 @@ function vectorToRGBNormal(vector: Vector3): string {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-export function drawTileNormalMap(
+function drawTileNormal(
   ctx: CanvasRenderingContext2D,
   size: number,
   padding: number,
-  edgeSmoothness: number
+  edgeSmoothness: number,
 ) {
   ctx.fillStyle = 'rgb(128, 128, 255)';
   ctx.fillRect(0, 0, size, size);
@@ -29,7 +29,7 @@ export function drawTileNormalMap(
   const addGradientColorStops = (
     gradient: CanvasGradient,
     c1: string,
-    c2: string
+    c2: string,
   ) => {
     gradient.addColorStop(0, c1);
     gradient.addColorStop(1, c2);
@@ -38,25 +38,25 @@ export function drawTileNormalMap(
   addGradientColorStops(
     gradients.top,
     vectorToRGBNormal(new Vector3(0, 1, edgeSmoothness).normalize()),
-    vectorToRGBNormal(new Vector3(0, 0, 1))
+    vectorToRGBNormal(new Vector3(0, 0, 1)),
   );
 
   addGradientColorStops(
     gradients.bottom,
     vectorToRGBNormal(new Vector3(0, 0, 1)),
-    vectorToRGBNormal(new Vector3(0, -1, edgeSmoothness).normalize())
+    vectorToRGBNormal(new Vector3(0, -1, edgeSmoothness).normalize()),
   );
 
   addGradientColorStops(
     gradients.left,
     vectorToRGBNormal(new Vector3(-1, 0, edgeSmoothness).normalize()),
-    vectorToRGBNormal(new Vector3(0, 0, 1))
+    vectorToRGBNormal(new Vector3(0, 0, 1)),
   );
 
   addGradientColorStops(
     gradients.right,
     vectorToRGBNormal(new Vector3(0, 0, 1)),
-    vectorToRGBNormal(new Vector3(1, 0, edgeSmoothness).normalize())
+    vectorToRGBNormal(new Vector3(1, 0, edgeSmoothness).normalize()),
   );
 
   ctx.fillStyle = gradients.top;
@@ -95,10 +95,34 @@ export function drawTileNormalMap(
   ctx.fill();
 }
 
-export function drawTileColorMap(
+export function drawTileNormalPatternMap(
+  ctx: CanvasRenderingContext2D,
+  size: number,
+  padding: number,
+  edgeSmoothness: number,
+  dimension: number,
+) {
+  const tileSize = size / dimension;
+  const tileScale = 1 / dimension;
+
+  for (let i = 0; i < dimension; i++) {
+    for (let j = 0; j < dimension; j++) {
+      ctx.save();
+
+      ctx.translate(i * tileSize, j * tileSize);
+      ctx.scale(tileScale, tileScale);
+
+      drawTileNormal(ctx, size, padding, edgeSmoothness);
+
+      ctx.restore();
+    }
+  }
+}
+
+export function drawTileColorPatternMap(
   ctx: CanvasRenderingContext2D,
   colors: string[],
-  dimension: number
+  dimension: number,
 ) {
   const tileSize = ctx.canvas.width / dimension;
 
@@ -106,8 +130,7 @@ export function drawTileColorMap(
 
   for (let row = 0; row < dimension; row++) {
     for (let col = 0; col < dimension; col++) {
-      const color = colors[colorIndex] || colors[colors.length - 1];
-      ctx.fillStyle = color;
+      ctx.fillStyle = colors[colorIndex] || colors[colors.length - 1];
       ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
 
       colorIndex++;
