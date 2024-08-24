@@ -3,18 +3,14 @@ import { TILE_SIZE, useCanvasTexture } from './useTileNormalMap.ts';
 import { useEffect } from 'react';
 import { drawTileColorPatternMap } from '../helpers/drawTexture';
 
-export function useTileColorMap(
-  colors: string[],
-  dimension: number,
-  repeat: Vector2,
-) {
+export function useTileColorMap(pattern: string[][], repeat: Vector2) {
   const [texture, ctx] = useCanvasTexture(TILE_SIZE);
 
   useEffect(() => {
-    drawTileColorPatternMap(ctx, colors, dimension);
+    drawTileColorPatternMap(ctx, pattern);
 
     texture.needsUpdate = true;
-  }, [texture, ctx, colors, dimension]);
+  }, [texture, ctx, pattern]);
 
   useEffect(() => {
     texture.repeat.copy(repeat);

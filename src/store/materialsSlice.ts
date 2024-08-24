@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Material {
-  color: string;
+  pattern: string[][];
   edgeRatio: number;
   edgeSmoothness: number;
   repeat: number;
@@ -14,7 +14,7 @@ export interface MaterialsState {
 }
 
 export const createBaseMaterial = (): Material => ({
-  color: '#5F5F89',
+  pattern: [['#5F5F89']],
   edgeRatio: 0.02,
   edgeSmoothness: 2,
   repeat: 10,
@@ -33,14 +33,14 @@ const materialsSlice = createSlice({
   reducers: {
     addMaterial: (
       state,
-      action: PayloadAction<{ id: string; material: Material }>
+      action: PayloadAction<{ id: string; material: Material }>,
     ) => {
       const { id, material } = action.payload;
       state[id] = material;
     },
     updateMaterial: (
       state,
-      action: PayloadAction<{ id: string; material: Partial<Material> }>
+      action: PayloadAction<{ id: string; material: Partial<Material> }>,
     ) => {
       const { id, material } = action.payload;
       state[id] = { ...state[id], ...material };
@@ -49,18 +49,18 @@ const materialsSlice = createSlice({
       const { id } = action.payload;
       delete state[id];
     },
-    updateMaterialColor: (
+    updateMaterialPattern: (
       state,
-      action: PayloadAction<{ id: string; color: string }>
+      action: PayloadAction<{ id: string; pattern: string[][] }>,
     ) => {
-      const { id, color } = action.payload;
+      const { id, pattern } = action.payload;
       if (state[id]) {
-        state[id].color = color;
+        state[id].pattern = pattern;
       }
     },
     updateMaterialEdgeRatio: (
       state,
-      action: PayloadAction<{ id: string; edgeRatio: number }>
+      action: PayloadAction<{ id: string; edgeRatio: number }>,
     ) => {
       const { id, edgeRatio } = action.payload;
       if (state[id]) {
@@ -69,7 +69,7 @@ const materialsSlice = createSlice({
     },
     updateMaterialEdgeSmoothness: (
       state,
-      action: PayloadAction<{ id: string; edgeSmoothness: number }>
+      action: PayloadAction<{ id: string; edgeSmoothness: number }>,
     ) => {
       const { id, edgeSmoothness } = action.payload;
       if (state[id]) {
@@ -78,7 +78,7 @@ const materialsSlice = createSlice({
     },
     updateMaterialTileRepeat: (
       state,
-      action: PayloadAction<{ id: string; tileRepeat: number }>
+      action: PayloadAction<{ id: string; tileRepeat: number }>,
     ) => {
       const { id, tileRepeat } = action.payload;
       if (state[id]) {
@@ -87,7 +87,7 @@ const materialsSlice = createSlice({
     },
     updateMaterialTileRoughness: (
       state,
-      action: PayloadAction<{ id: string; tileRoughness: number }>
+      action: PayloadAction<{ id: string; tileRoughness: number }>,
     ) => {
       const { id, tileRoughness } = action.payload;
       if (state[id]) {
@@ -96,7 +96,7 @@ const materialsSlice = createSlice({
     },
     updateMaterialTileMetalness: (
       state,
-      action: PayloadAction<{ id: string; tileMetalness: number }>
+      action: PayloadAction<{ id: string; tileMetalness: number }>,
     ) => {
       const { id, tileMetalness } = action.payload;
       if (state[id]) {
@@ -110,7 +110,7 @@ export const {
   addMaterial,
   updateMaterial,
   removeMaterial,
-  updateMaterialColor,
+  updateMaterialPattern,
   updateMaterialEdgeRatio,
   updateMaterialEdgeSmoothness,
   updateMaterialTileRepeat,

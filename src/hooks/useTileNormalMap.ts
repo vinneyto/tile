@@ -34,8 +34,8 @@ export function useCanvasTexture(size: number) {
 export function useTileNormalMap(
   edgeRatio: number,
   edgeSmoothness: number,
+  patternSize: number,
   repeat: Vector2,
-  dimension: number,
 ) {
   const [texture, ctx] = useCanvasTexture(TILE_SIZE);
 
@@ -47,7 +47,7 @@ export function useTileNormalMap(
       TILE_SIZE,
       edgeWidth,
       edgeSmoothness,
-      dimension,
+      patternSize,
     );
 
     texture.needsUpdate = true;

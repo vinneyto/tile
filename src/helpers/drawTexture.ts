@@ -100,13 +100,13 @@ export function drawTileNormalPatternMap(
   size: number,
   padding: number,
   edgeSmoothness: number,
-  dimension: number,
+  patternSize: number,
 ) {
-  const tileSize = size / dimension;
-  const tileScale = 1 / dimension;
+  const tileSize = size / patternSize;
+  const tileScale = 1 / patternSize;
 
-  for (let i = 0; i < dimension; i++) {
-    for (let j = 0; j < dimension; j++) {
+  for (let i = 0; i < patternSize; i++) {
+    for (let j = 0; j < patternSize; j++) {
       ctx.save();
 
       ctx.translate(i * tileSize, j * tileSize);
@@ -121,17 +121,17 @@ export function drawTileNormalPatternMap(
 
 export function drawTileColorPatternMap(
   ctx: CanvasRenderingContext2D,
-  colors: string[],
-  dimension: number,
+  pattern: string[][],
 ) {
-  const tileSize = ctx.canvas.width / dimension;
+  const tileSize = ctx.canvas.width / pattern.length;
 
   let colorIndex = 0;
 
-  for (let row = 0; row < dimension; row++) {
-    for (let col = 0; col < dimension; col++) {
-      ctx.fillStyle = colors[colorIndex] || colors[colors.length - 1];
-      ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+  for (let j = 0; j < pattern.length; j++) {
+    const row = pattern[j];
+    for (let i = 0; i < row.length; i++) {
+      ctx.fillStyle = row[i];
+      ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 
       colorIndex++;
     }

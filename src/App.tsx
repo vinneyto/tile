@@ -8,7 +8,7 @@ import {
   setMaterialId,
 } from './store/applicationSlice';
 import {
-  updateMaterialColor,
+  updateMaterialPattern,
   updateMaterialEdgeRatio,
   updateMaterialEdgeSmoothness,
   updateMaterialTileMetalness,
@@ -38,7 +38,7 @@ const MATERIALS_LIST = ['floor', 'walls'];
 
 export const App = () => {
   const { environment, materialId } = useAppSelector(
-    (state) => state.application
+    (state) => state.application,
   );
 
   const materials = useAppSelector((state) => state.materials);
@@ -91,13 +91,13 @@ export const App = () => {
 
         <SidebarItem name="Color">
           <ColorPicker
-            value={material.color}
+            value={material.pattern[0][0]}
             onChange={(c) =>
               dispatch(
-                updateMaterialColor({
+                updateMaterialPattern({
                   id: materialId,
-                  color: c.toHexString(),
-                })
+                  pattern: [[c.toHexString()]],
+                }),
               )
             }
           />
@@ -126,7 +126,7 @@ export const App = () => {
                 updateMaterialEdgeSmoothness({
                   id: materialId,
                   edgeSmoothness,
-                })
+                }),
               )
             }
           />
@@ -155,7 +155,7 @@ export const App = () => {
                 updateMaterialTileRoughness({
                   id: materialId,
                   tileRoughness,
-                })
+                }),
               )
             }
           />
@@ -172,7 +172,7 @@ export const App = () => {
                 updateMaterialTileMetalness({
                   id: materialId,
                   tileMetalness,
-                })
+                }),
               )
             }
           />
