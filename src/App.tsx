@@ -8,6 +8,9 @@ import {
   setMaterialId,
 } from './store/applicationSlice';
 import {
+  DEFAULT_PATTERN_1X1,
+  DEFAULT_PATTERN_2X2,
+  DEFAULT_PATTERN_3X3,
   updateMaterialEdgeRatio,
   updateMaterialEdgeSmoothness,
   updateMaterialPattern,
@@ -34,6 +37,14 @@ const ENVIRONMENTS_LIST = [
   'park',
   'lobby',
 ];
+
+const TILE_PATTERN_SIZE_LIST = ['1x1', '2x2', '3x3'];
+
+const TILE_PATTERN_MAP = {
+  '1x1': DEFAULT_PATTERN_1X1,
+  '2x2': DEFAULT_PATTERN_2X2,
+  '3x3': DEFAULT_PATTERN_3X3,
+};
 
 const MATERIALS_LIST = ['floor', 'walls'];
 
@@ -89,6 +100,27 @@ export const App = () => {
         </SidebarItem>
 
         <Divider />
+
+        <SidebarItem name="Pattern">
+          <Select
+            defaultValue="3x3"
+            style={{ width: '100%' }}
+            onChange={(value: keyof typeof TILE_PATTERN_MAP) => {
+              dispatch(
+                updateMaterialPattern({
+                  id: materialId,
+                  pattern: TILE_PATTERN_MAP[value],
+                }),
+              );
+            }}
+          >
+            {TILE_PATTERN_SIZE_LIST.map((size) => (
+              <Select.Option key={size} value={size}>
+                {size}
+              </Select.Option>
+            ))}
+          </Select>
+        </SidebarItem>
 
         <SidebarItem name="Color">
           <TilePatternEditor

@@ -51,7 +51,7 @@ export function useTileNormalMap(
     );
 
     texture.needsUpdate = true;
-  }, [texture, ctx, edgeSmoothness, edgeRatio]);
+  }, [ctx, edgeRatio, edgeSmoothness, patternSize, texture]);
 
   useEffect(() => {
     texture.repeat.copy(repeat);

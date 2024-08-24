@@ -13,12 +13,23 @@ export interface MaterialsState {
   [id: string]: Material;
 }
 
+export const DEFAULT_PATTERN_1X1 = [
+  ['#F4E1D2'], // Мягкий кремовый
+];
+
+export const DEFAULT_PATTERN_2X2 = [
+  ['#F4E1D2', '#ECD5C4'], // Мягкие постельные тона: кремовый, светло-коричневый
+  ['#EFEAD8', '#D3C5B3'], // Светлый желтоватый и светло-серый
+];
+
+export const DEFAULT_PATTERN_3X3 = [
+  ['#F4E1D2', '#ECD5C4', '#D8BFAA'], // Мягкие постельные тона: кремовый, светло-коричневый, бежевый
+  ['#EFEAD8', '#D3C5B3', '#B8ADA7'], // Светлый желтоватый, светло-серый, светло-розовый
+  ['#D9D4CF', '#C2BAB6', '#AFAA9C'], // Светлый серо-бежевый, теплый сероватый, оливковый
+];
+
 export const createBaseMaterial = (): Material => ({
-  pattern: [
-    ['#F4E1D2', '#ECD5C4', '#D8BFAA'], // Мягкие постельные тона: кремовый, светло-коричневый, бежевый
-    ['#EFEAD8', '#D3C5B3', '#B8ADA7'], // Светлый желтоватый, светло-серый, светло-розовый
-    ['#D9D4CF', '#C2BAB6', '#AFAA9C'], // Светлый серо-бежевый, теплый сероватый, оливковый
-  ],
+  pattern: DEFAULT_PATTERN_3X3,
   edgeRatio: 0.02,
   edgeSmoothness: 2,
   repeat: 4,

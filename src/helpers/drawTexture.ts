@@ -125,15 +125,11 @@ export function drawTileColorPatternMap(
 ) {
   const tileSize = ctx.canvas.width / pattern.length;
 
-  let colorIndex = 0;
-
   for (let j = 0; j < pattern.length; j++) {
     const row = pattern[j];
     for (let i = 0; i < row.length; i++) {
       ctx.fillStyle = row[i];
       ctx.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
-
-      colorIndex++;
     }
   }
 }
