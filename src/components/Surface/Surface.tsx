@@ -3,7 +3,7 @@ import { TileViewer } from '../TileViewer';
 import { useTileNormalMap } from '../../hooks/useTileNormalMap.ts';
 import { MeshProps } from '@react-three/fiber';
 import { Material } from '../../store/materialsSlice';
-import { useTileColorMap } from '../../hooks/useTileColorTexture';
+import { useTileColorMap } from '../../hooks/useTileColorMap.ts';
 // import { useMemo } from 'react';
 
 export interface SurfaceProps extends MeshProps {
