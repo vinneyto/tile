@@ -22,6 +22,7 @@ import cl from './App.module.css';
 import { SidebarItem } from './components/UI/SidebarItem/SidebarItem';
 import { Scene } from './containers/Scene';
 import { TilePatternEditor } from './components/TilePatternEditor';
+import { SyncStateWithQuery } from './containers/SyncStateWithQuery.tsx';
 
 const { Sider, Content } = Layout;
 
@@ -61,6 +62,8 @@ export const App = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      <SyncStateWithQuery />
+
       <Content
         style={{
           display: 'flex',
