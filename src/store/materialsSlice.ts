@@ -14,10 +14,14 @@ export interface MaterialsState {
 }
 
 export const createBaseMaterial = (): Material => ({
-  pattern: [['#5F5F89']],
+  pattern: [
+    ['#F4E1D2', '#ECD5C4', '#D8BFAA'], // Мягкие постельные тона: кремовый, светло-коричневый, бежевый
+    ['#EFEAD8', '#D3C5B3', '#B8ADA7'], // Светлый желтоватый, светло-серый, светло-розовый
+    ['#D9D4CF', '#C2BAB6', '#AFAA9C'], // Светлый серо-бежевый, теплый сероватый, оливковый
+  ],
   edgeRatio: 0.02,
   edgeSmoothness: 2,
-  repeat: 10,
+  repeat: 4,
   roughness: 0.1,
   metalness: 0.1,
 });

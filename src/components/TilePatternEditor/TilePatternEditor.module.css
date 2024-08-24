@@ -1,0 +1,5 @@
+.tilePatternEditor {
+  display: grid;
+  gap: 4px;
+  justify-content: start;
+}

@@ -1,4 +1,4 @@
-import { Layout, Slider, ColorPicker, Select, Divider } from 'antd';
+import { Divider, Layout, Select, Slider } from 'antd';
 import { PresetsType } from '@react-three/drei/helpers/environment-assets';
 import { useAppSelector } from './store';
 import { useDispatch } from 'react-redux';
@@ -8,9 +8,9 @@ import {
   setMaterialId,
 } from './store/applicationSlice';
 import {
-  updateMaterialPattern,
   updateMaterialEdgeRatio,
   updateMaterialEdgeSmoothness,
+  updateMaterialPattern,
   updateMaterialTileMetalness,
   updateMaterialTileRepeat,
   updateMaterialTileRoughness,
@@ -18,6 +18,7 @@ import {
 import cl from './App.module.css';
 import { SidebarItem } from './components/UI/SidebarItem/SidebarItem';
 import { Scene } from './containers/Scene';
+import { TilePatternEditor } from './components/TilePatternEditor';
 
 const { Sider, Content } = Layout;
 
@@ -90,13 +91,13 @@ export const App = () => {
         <Divider />
 
         <SidebarItem name="Color">
-          <ColorPicker
-            value={material.pattern[0][0]}
-            onChange={(c) =>
+          <TilePatternEditor
+            pattern={material.pattern}
+            onChangePattern={(pattern) =>
               dispatch(
                 updateMaterialPattern({
                   id: materialId,
-                  pattern: [[c.toHexString()]],
+                  pattern,
                 }),
               )
             }
