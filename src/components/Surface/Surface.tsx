@@ -4,6 +4,7 @@ import { useTileNormalMap } from '../../hooks/useTileNormalMap.ts';
 import { MeshProps } from '@react-three/fiber';
 import { Material } from '../../store/materialsSlice';
 import { useTileColorMap } from '../../hooks/useTileColorMap.ts';
+import { useCallback } from 'react';
 // import { useMemo } from 'react';
 
 export interface SurfaceProps extends MeshProps {
@@ -23,6 +24,14 @@ export function Surface({ tile, tileDebug, ...rest }: SurfaceProps) {
     repeat,
   );
 
+  const handlePointerOver = useCallback(() => {
+    document.body.style.cursor = 'pointer';
+  }, []);
+
+  const handlePointerOut = useCallback(() => {
+    document.body.style.cursor = 'auto';
+  }, []);
+
   return (
     <TileViewer
       map={tileColorMap}
@@ -30,6 +39,8 @@ export function Surface({ tile, tileDebug, ...rest }: SurfaceProps) {
       debug={tileDebug}
       roughness={tile.roughness}
       metalness={tile.metalness}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
       {...rest}
     >
       {/* <axesHelper /> */}
