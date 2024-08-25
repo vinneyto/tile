@@ -90,7 +90,7 @@ export const App = () => {
 
         <SidebarItem name="Material">
           <Select
-            defaultValue={materialId}
+            value={materialId}
             style={{ width: '100%' }}
             onChange={(value: AppMaterialId) => dispatch(setMaterialId(value))}
           >
@@ -108,6 +108,7 @@ export const App = () => {
           <Select
             defaultValue="3x3"
             style={{ width: '100%' }}
+            value={getPatternBySize(material.pattern[0].length)}
             onChange={(value: keyof typeof TILE_PATTERN_MAP) => {
               dispatch(
                 updateMaterialPattern({
@@ -217,3 +218,7 @@ export const App = () => {
     </Layout>
   );
 };
+
+function getPatternBySize(size: number) {
+  return `${size}x${size}` as keyof typeof TILE_PATTERN_MAP;
+}
