@@ -5,6 +5,7 @@ import { MeshProps } from '@react-three/fiber';
 import { Material } from '../../store/materialsSlice';
 import { useTileColorMap } from '../../hooks/useTileColorMap.ts';
 import { useCallback } from 'react';
+import { useDebounce } from '../../hooks/useDebounce.ts';
 // import { useMemo } from 'react';
 
 export interface SurfaceProps extends MeshProps {
@@ -15,12 +16,18 @@ export interface SurfaceProps extends MeshProps {
 export function Surface({ tile, tileDebug, ...rest }: SurfaceProps) {
   const repeat = new Vector2(tile.repeat, tile.repeat);
 
-  const tileColorMap = useTileColorMap(tile.pattern, repeat);
+  const [pattern] = useDebounce([tile.pattern], 300);
 
+  const [edgeRatio, edgeSmoothness, patternSize] = useDebounce(
+    [tile.edgeRatio, tile.edgeSmoothness, tile.pattern.length],
+    300,
+  );
+
+  const tileColorMap = useTileColorMap(pattern, repeat);
   const tileNormalTexture = useTileNormalMap(
-    tile.edgeRatio,
-    tile.edgeSmoothness,
-    tile.pattern.length,
+    edgeRatio,
+    edgeSmoothness,
+    patternSize,
     repeat,
   );
 
