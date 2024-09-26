@@ -1,7 +1,5 @@
 import { Row, Col } from 'antd';
 
-import cl from './SidebarItem.module.css';
-
 export interface SidebarItemProps {
   name: string;
   children: React.ReactNode;
@@ -9,7 +7,7 @@ export interface SidebarItemProps {
 
 export const SidebarItem = ({ name, children }: SidebarItemProps) => {
   return (
-    <Row align="middle" className={cl.sidebarItem}>
+    <Row align="middle">
       <Col span={8}>
         <label>{name}:</label>
       </Col>

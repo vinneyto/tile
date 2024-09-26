@@ -1,3 +1,30 @@
 .sidebar {
   padding: 24px;
 }
+
+.tabs {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5)
+}
+
+.tabPane {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.tabPaneContent {
+  flex-grow: 1;
+  max-width: 400px;
+}
+
+.tabPanePatternContent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 16px;
+  align-items: end;
+}
