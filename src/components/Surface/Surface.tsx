@@ -11,6 +11,7 @@ import { useDebounce } from '../../hooks/useDebounce.ts';
 export interface SurfaceProps extends MeshProps {
   tile: Material;
   tileDebug?: 'map' | 'normalMap';
+  selected?: boolean;
 }
 
 export function Surface({ tile, tileDebug, ...rest }: SurfaceProps) {

@@ -9,12 +9,16 @@ import { useTap } from '../../hooks/useTap.ts';
 
 export const Scene = () => {
   const environment = useAppSelector((state) => state.application.environment);
+  const materialId = useAppSelector((state) => state.application.materialId);
   const materials = useAppSelector((state) => state.materials);
 
   const dispatch = useDispatch();
 
   const floorMaterial = materials['floor'];
   const wallsMaterial = materials['walls'];
+
+  const isFloorSelected = materialId === 'floor';
+  const isWallsSelected = materialId === 'walls';
 
   const floorTap = useTap(() => {
     dispatch(setMaterialId('floor'));
@@ -34,6 +38,7 @@ export const Scene = () => {
         position={new Vector3(0, -2, 0)}
         rotation={new Euler(-Math.PI / 2, 0, 0)}
         tile={floorMaterial}
+        selected={isFloorSelected}
       />
 
       <group {...wallsTap}>
@@ -41,24 +46,28 @@ export const Scene = () => {
           position={new Vector3(0, 0, -2)}
           rotation={new Euler(0, 0, 0)}
           tile={wallsMaterial}
+          selected={isWallsSelected}
         />
 
         <Surface
           position={new Vector3(0, 0, 2)}
           rotation={new Euler(0, Math.PI, 0)}
           tile={wallsMaterial}
+          selected={isWallsSelected}
         />
 
         <Surface
           position={new Vector3(-2, 0, 0)}
           rotation={new Euler(0, Math.PI / 2, 0)}
           tile={wallsMaterial}
+          selected={isWallsSelected}
         />
 
         <Surface
           position={new Vector3(2, 0, 0)}
           rotation={new Euler(0, -Math.PI / 2, 0)}
           tile={wallsMaterial}
+          selected={isWallsSelected}
         />
       </group>
     </Canvas>
