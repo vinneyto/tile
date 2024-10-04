@@ -1,4 +1,4 @@
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment, OrbitControls, Gltf } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Euler, Vector3 } from 'three';
 import { Surface } from '../../components/Surface';
@@ -32,6 +32,31 @@ export const Scene = () => {
     <Canvas style={{ background: '#a333333' }}>
       <Environment preset={environment} background />
       <OrbitControls makeDefault />
+
+      {/* "Bath" (https://skfb.ly/6nBOF) by Henry VIII is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). */}
+      <Gltf
+        src="/bath.glb"
+        scale={0.018}
+        rotation={[0, -Math.PI / 2, 0]}
+        position={[0, -0.85, -1]}
+      />
+
+      {/* "Toilet" (https://skfb.ly/6S9CM) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). */}
+      <Gltf
+        src="/toilet.glb"
+        scale={1.5}
+        rotation={[0, -Math.PI / 2, 0]}
+        position={[2, -2, 0.8]}
+      />
+
+      {/* "Simple Sink" (https://skfb.ly/6RrqF) by Andrew.Mischenko is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). */}
+      <Gltf
+        src="/sink.glb"
+        scale={0.015}
+        // scale={1.5}
+        // rotation={[0, -Math.PI / 2, 0]}
+        position={[-1.7, -1, 0.8]}
+      />
 
       <Surface
         {...floorTap}
