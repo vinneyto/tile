@@ -1,6 +1,6 @@
 import { a, useSpring } from '@react-spring/three';
 import { MeshProps } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Texture, Vector2 } from 'three';
 
 export type TileDebug = 'map' | 'normalMap';
