@@ -1,6 +1,5 @@
-import { a, useSpring } from '@react-spring/three';
+import { a, SpringValue } from '@react-spring/three';
 import { MeshProps } from '@react-three/fiber';
-import { useEffect } from 'react';
 import { Texture, Vector2 } from 'three';
 
 export type TileDebug = 'map' | 'normalMap';
@@ -13,7 +12,7 @@ export interface MaterialViewerProps extends MeshProps {
   roughness?: number;
   metalness?: number;
   children?: React.ReactNode;
-  selected?: boolean;
+  selectionOpacity?: number | SpringValue<number>;
 }
 
 export function TileViewer({
@@ -22,26 +21,11 @@ export function TileViewer({
   normalMap,
   roughness,
   metalness,
+  selectionOpacity,
   debug,
-  selected,
   children,
   ...rest
 }: MaterialViewerProps = {}) {
-  const [{ opacity }] = useSpring(
-    {
-      from: { opacity: 0 },
-      to: async (next) => {
-        await next({ opacity: selected ? 0.5 : 0 });
-        await next({ opacity: 0 });
-      },
-    },
-    [selected],
-  );
-
-  useEffect(() => {
-    opacity.stop();
-  }, [opacity]);
-
   if (debug) {
     return (
       <mesh {...rest}>
@@ -71,7 +55,7 @@ export function TileViewer({
           depthWrite={false}
           color="white"
           transparent={true}
-          opacity={opacity}
+          opacity={selectionOpacity || 0}
         />
       </a.mesh>
     </mesh>

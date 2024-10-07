@@ -6,12 +6,13 @@ import { Material } from '../../store/materialsSlice';
 import { useTileColorMap } from '../../hooks/useTileColorMap.ts';
 import { useCallback } from 'react';
 import { useDebounce } from '../../hooks/useDebounce.ts';
+import { SpringValue } from '@react-spring/three';
 // import { useMemo } from 'react';
 
 export interface SurfaceProps extends MeshProps {
   tile: Material;
   tileDebug?: 'map' | 'normalMap';
-  selected?: boolean;
+  selectionOpacity?: number | SpringValue<number>;
 }
 
 export function Surface({ tile, tileDebug, ...rest }: SurfaceProps) {

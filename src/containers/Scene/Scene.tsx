@@ -6,10 +6,17 @@ import { useAppSelector } from '../../store';
 import { useDispatch } from 'react-redux';
 import { setMaterialId } from '../../store/applicationSlice.ts';
 import { useTap } from '../../hooks/useTap.ts';
+import { useSelectAnimation } from '../../hooks/useSelectAnimation.ts';
+
+const WALLS: Array<{ position: Vector3; rotation: Euler }> = [
+  { position: new Vector3(0, 0, -2), rotation: new Euler(0, 0, 0) },
+  { position: new Vector3(0, 0, 2), rotation: new Euler(0, Math.PI, 0) },
+  { position: new Vector3(-2, 0, 0), rotation: new Euler(0, Math.PI / 2, 0) },
+  { position: new Vector3(2, 0, 0), rotation: new Euler(0, -Math.PI / 2, 0) },
+];
 
 export const Scene = () => {
   const environment = useAppSelector((state) => state.application.environment);
-  const materialId = useAppSelector((state) => state.application.materialId);
   const materials = useAppSelector((state) => state.materials);
 
   const dispatch = useDispatch();
@@ -17,15 +24,17 @@ export const Scene = () => {
   const floorMaterial = materials['floor'];
   const wallsMaterial = materials['walls'];
 
-  const isFloorSelected = materialId === 'floor';
-  const isWallsSelected = materialId === 'walls';
+  const [floorSelectionOpacity, selectFloor] = useSelectAnimation();
+  const [wallsSelectionOpacity, selectWalls] = useSelectAnimation();
 
   const floorTap = useTap(() => {
     dispatch(setMaterialId('floor'));
+    selectFloor();
   }, [dispatch]);
 
   const wallsTap = useTap(() => {
     dispatch(setMaterialId('walls'));
+    selectWalls();
   }, [dispatch]);
 
   return (
@@ -63,37 +72,19 @@ export const Scene = () => {
         position={new Vector3(0, -2, 0)}
         rotation={new Euler(-Math.PI / 2, 0, 0)}
         tile={floorMaterial}
-        selected={isFloorSelected}
+        selectionOpacity={floorSelectionOpacity}
       />
 
       <group {...wallsTap}>
-        <Surface
-          position={new Vector3(0, 0, -2)}
-          rotation={new Euler(0, 0, 0)}
-          tile={wallsMaterial}
-          selected={isWallsSelected}
-        />
-
-        <Surface
-          position={new Vector3(0, 0, 2)}
-          rotation={new Euler(0, Math.PI, 0)}
-          tile={wallsMaterial}
-          selected={isWallsSelected}
-        />
-
-        <Surface
-          position={new Vector3(-2, 0, 0)}
-          rotation={new Euler(0, Math.PI / 2, 0)}
-          tile={wallsMaterial}
-          selected={isWallsSelected}
-        />
-
-        <Surface
-          position={new Vector3(2, 0, 0)}
-          rotation={new Euler(0, -Math.PI / 2, 0)}
-          tile={wallsMaterial}
-          selected={isWallsSelected}
-        />
+        {WALLS.map((wall, index) => (
+          <Surface
+            key={index}
+            position={wall.position}
+            rotation={wall.rotation}
+            tile={wallsMaterial}
+            selectionOpacity={wallsSelectionOpacity}
+          />
+        ))}
       </group>
     </Canvas>
   );
