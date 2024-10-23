@@ -1,6 +1,7 @@
 import cl from './TilePatternEditor.module.css';
 import React from 'react';
-import { ColorPicker } from 'antd';
+import { tileColors } from '../../colors';
+import { TileColorPicker } from '../TileColorPicker';
 
 export interface TilePatternEditorProps {
   className?: string;
@@ -17,12 +18,13 @@ export const TilePatternEditor = ({
   for (let i = 0; i < pattern.length; i++) {
     for (let j = 0; j < pattern[i].length; j++) {
       elements.push(
-        <ColorPicker
+        <TileColorPicker
           key={i * pattern.length + j}
+          data={tileColors}
           value={pattern[i][j]}
           onChange={(c) => {
             const copy = pattern.map((r) => [...r]);
-            copy[i][j] = c.toHexString();
+            copy[i][j] = c;
             onChangePattern(copy);
           }}
         />,
